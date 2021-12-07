@@ -15,6 +15,29 @@ def horizontal_or_vertical?(coordinate_pair)
 end
 
 # Function only designed to handle horizontal or vertical lines.
+# def intermediate_points(coordinate_pair)
+#   x_one = coordinate_pair[0][0]
+#   y_one = coordinate_pair[0][1]
+#   x_two = coordinate_pair[1][0]
+#   y_two = coordinate_pair[1][1]
+#   intermediate_points = []
+#   i = 0
+#   if x_one == x_two
+#     points = points(y_one, y_two)
+#     points.length.times do
+#       intermediate_points << [x_one, points[i]]
+#       i += 1
+#     end
+#   else
+#     points = points(x_one, x_two)
+#     points.length.times do
+#       intermediate_points << [points[i], y_one]
+#       i += 1
+#     end
+#   end
+#   intermediate_points
+# end
+
 def intermediate_points(coordinate_pair)
   x_one = coordinate_pair[0][0]
   y_one = coordinate_pair[0][1]
@@ -28,18 +51,27 @@ def intermediate_points(coordinate_pair)
       intermediate_points << [x_one, points[i]]
       i += 1
     end
-  else
+  elsif y_one == y_two
     points = points(x_one, x_two)
     points.length.times do
       intermediate_points << [points[i], y_one]
       i += 1
     end
+  else
+    intermediate_points = figure_diagonals(x_one, x_two, y_one, y_two)
   end
   intermediate_points
 end
 
+def figure_diagonals(x_one, x_two, y_one, y_two)
+  x_points = points(x_one, x_two)
+  y_points = points(y_one, y_two)
+  x_points.zip(y_points)
+end
+
+
 def points(point_one, point_two)
-  (point_one..point_two).to_a.empty? ? (point_two..point_one).to_a : (point_one..point_two).to_a
+  (point_one..point_two).to_a.empty? ? (point_two..point_one).to_a.reverse : (point_one..point_two).to_a
 end
 
 def convert_coord_to_index(coordinate)
@@ -62,16 +94,31 @@ def create_positional_array(size = 1000)
   positional_array
 end
 
+# Main loop function for ignoring diagonals for part one
+# def main_loop(coordinate_list)
+#   i = 0
+#   positional_array = create_positional_array
+#   while i < coordinate_list.length
+#     if horizontal_or_vertical?(coordinate_list[i])
+#       points = intermediate_points(coordinate_list[i])
+#       points.each do |point|
+#         index = convert_coord_to_index(point)
+#         positional_array[index] += 1
+#       end
+#     end
+#     i += 1
+#   end
+#   positional_array
+# end
+
 def main_loop(coordinate_list)
   i = 0
   positional_array = create_positional_array
   while i < coordinate_list.length
-    if horizontal_or_vertical?(coordinate_list[i])
-      points = intermediate_points(coordinate_list[i])
-      points.each do |point|
-        index = convert_coord_to_index(point)
-        positional_array[index] += 1
-      end
+    points = intermediate_points(coordinate_list[i])
+    points.each do |point|
+      index = convert_coord_to_index(point)
+      positional_array[index] += 1
     end
     i += 1
   end
