@@ -5,7 +5,7 @@ numbers = input.map(&:to_i)
 
 def group(numbers)
   group = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-  numbers.each { |number| group[number] +=1 }
+  numbers.each { |number| group[number] += 1 }
   group
 end
 
